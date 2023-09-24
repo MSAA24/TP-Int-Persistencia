@@ -1,0 +1,14 @@
+     cd api/
+     npm install 
+     npm install sequelize --save
+     npm install sequelize-cli --save
+     npx sequelize init
+     DEBUG=api:* npm start
+
+
+
+     npx sequelize-cli model:generate --name carrera --attributes nombre:string
+     npx sequelize db:migrate
+
+
+     sudo npx sequelize-cli model:generate --name materia --attributes nombre:string,id_carrera:integer
