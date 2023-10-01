@@ -3,13 +3,15 @@ var router = express.Router();
 var models = require("../models");
 
 router.get("/", (req, res,next) => {
-
+  const cantAVer = parseInt(req.query.cantAVer) || 10;
+  const paginaActual = parseInt(req.query.paginaActual) || 1;
   models.materia.findAll({attributes: ["id","nombre","id_carrera"],
       
       /////////se agrega la asociacion 
-      include:[{as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]}]
+      include:[{as:'Carrera-Relacionada', model:models.carrera, attributes: ["id","nombre"]}],
       ////////////////////////////////
-
+      offset:((paginaActual-1)*cantAVer),
+      limit : cantAVer
     }).then(materias => res.send(materias)).catch(error => { return next(error)});
 });
 

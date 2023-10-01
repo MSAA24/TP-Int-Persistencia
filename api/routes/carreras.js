@@ -3,12 +3,16 @@ var router = express.Router();
 var models = require("../models");
 
 router.get("/", (req, res) => {
-  models.carrera
-    .findAll({
-      attributes: ["id", "nombre"]
-    })
-    .then(carreras => res.send(carreras))
-    .catch(() => res.sendStatus(500));
+  const cantAVer = parseInt(req.query.cantAVer) || 10;
+  const paginaActual = parseInt(req.query.paginaActual) || 1;
+    models.carrera
+      .findAll({
+        attributes: ['id', 'nombre'],
+        offset:((paginaActual-1)*cantAVer),
+        limit : cantAVer
+      })
+      .then((carreras) => res.send(carreras))
+      .catch(() => res.sendStatus(500));
 });
 
 router.post("/", (req, res) => {

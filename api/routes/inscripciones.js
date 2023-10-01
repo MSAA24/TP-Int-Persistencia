@@ -3,14 +3,17 @@ var router = express.Router();
 var models = require("../models");
 
 router.get("/", (req, res,next) => {
-
+  const cantAVer = parseInt(req.query.cantAVer) || 10;
+  const paginaActual = parseInt(req.query.paginaActual) || 1;
   models.inscripcion.findAll({attributes: ["id","id_materia","id_alumno"],
       
       /////////se agrega la asociacion 
       include:[{as:'Inscripcion-Alumno-Relacion', model:models.alumno, attributes: ["id","nombre", "apellido"]},
-        {as:'Inscripcion-Materia-Relacion', model:models.materia, attributes: ["id","nombre"]}]
+        {as:'Inscripcion-Materia-Relacion', model:models.materia, attributes: ["id","nombre"]}], 
       ////////////////////////////////
-
+      
+      offset:((paginaActual-1)*cantAVer),
+      limit : cantAVer
     }).then(inscripciones => res.send(inscripciones)).catch(error => { return next(error)});
 });
 
